@@ -21,7 +21,7 @@ app.post('/todos', (req, res) => {
     }, (err) => {
         res.status(400).send(err);
     })
-})
+});
 
 app.get('/todos', (req, res) => {
     Todo.find({}).then((todos) => {
@@ -29,7 +29,7 @@ app.get('/todos', (req, res) => {
     }, (err) => {
         res.status(400).send(err);
     })
-})
+});
 
 app.get('/todos/:id', (req, res) => {
     var id = req.params.id;
@@ -45,7 +45,23 @@ app.get('/todos/:id', (req, res) => {
     }).catch((e) => {
         res.sendStatus(400).send();
     })
-})
+});
+
+app.delete('/todos/:id', (req, res) => {
+    var id = req.params.id;
+
+    if (!ObjectID.isValid(id)) {
+        return res.sendStatus(404).send();
+    }
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if (!todo) {
+            return res.sendStatus(404).send();
+        }
+        res.send({todo});
+    }).catch((err) => {
+        res.sendStatus(400).send();
+    })
+});
 
 app.listen(port, () => {
     console.log(`App is listening on port ${port}`);
