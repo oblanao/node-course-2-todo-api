@@ -13,11 +13,11 @@ app.post('/todos', (req, res) => {
     var todo = new Todo({
         text: req.body.text
     });
-
+    
     todo.save().then((doc) => {
         res.send(JSON.stringify(doc, null, 2));
     }, (err) => {
-        res.status(400).send('Unable to save todo.');
+        res.status(400).send(err);
     })
 })
 
